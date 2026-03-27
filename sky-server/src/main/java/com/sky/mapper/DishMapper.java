@@ -9,6 +9,7 @@ import com.sky.vo.DishVO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
@@ -34,35 +35,39 @@ public interface DishMapper {
 
     /**
      * 分页查询菜品
-     * @param dishPageQueryDTO
-     * @return
      */
     Page<DishVO> pageQuery(DishPageQueryDTO dishPageQueryDTO);
 
     /**
      * 根据id查询菜品
-     * @param id
-     * @return
      */
     @Select("select * from dish where id = #{id}")
     Dish getById(Long id);
 
     /**
      * 根据ID删除菜品
-     * @param id
      */
     @Delete("delete from dish where id = #{id} ")
     void deleteById(Long id);
 
     /**
      * 批量删除菜品
-     * @param ids
      */
     void deleteByIds(List<Long> ids);
 
     /**
      * 修改菜品
-     * @param dish
      */
     void updateById(Dish dish);
+
+    /**
+     * 动态条件查询菜品
+     */
+    List<Dish> list(Dish dish);
+
+    /**
+     * 根据套餐id查询菜品选项
+     */
+    @Select("select a.* from dish a left join setmeal_dish b on a.id = b.dish_id where b.setmeal_id = #{setmealId}")
+    List<Dish> getBySetmealId(Long id);
 }
